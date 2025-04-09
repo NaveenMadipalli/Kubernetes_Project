@@ -3,6 +3,7 @@
   tasks:
     - name: Delete old deployment
       command: kubectl delete -f /home/ubuntu/Deployment.yml
+      ignore_errors: yes
       environment:
         KUBECONFIG: /home/ubuntu/.kube/config
 
