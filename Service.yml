@@ -5,7 +5,7 @@ metadata:
   labels:
     app: naveen
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 8080     
