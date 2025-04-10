@@ -31,30 +31,46 @@
 
 
 
-FROM almalinux:8
+# FROM almalinux:8
 
-MAINTAINER naveen@gmail.com
+# MAINTAINER naveen@gmail.com
 
-# Install required packages
-RUN yum -y update && \
-    yum -y install git httpd && \
-    yum clean all
+# # Install required packages
+# RUN yum -y update && \
+#     yum -y install git httpd && \
+#     yum clean all
 
-# Set working directory
-WORKDIR /var/www/html/
+# # Set working directory
+# WORKDIR /var/www/html/
 
-# Clone your portfolio project from GitHub
-RUN git clone https://github.com/NaveenMadipalli/portfolio.git /var/www/html/
+# # Clone your portfolio project from GitHub
+# RUN git clone https://github.com/NaveenMadipalli/portfolio.git /var/www/html/
 
-# Set permissions (optional)
-RUN chmod -R 755 /var/www/html/
+# # Set permissions (optional)
+# RUN chmod -R 755 /var/www/html/
 
-# Expose Apache's default port
+# # Expose Apache's default port
+# EXPOSE 80
+
+# # Start Apache in foreground
+# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+
+
+
+
+# Use an Apache web server base image
+FROM httpd:2.4
+
+# Install git to clone the portfolio repo
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
+
+# Clone your portfolio repo
+RUN git clone https://github.com/NaveenMadipalli/portfolio.git /usr/local/apache2/htdocs/
+
+# Expose port 80
 EXPOSE 80
-
-# Start Apache in foreground
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
-
 
 
