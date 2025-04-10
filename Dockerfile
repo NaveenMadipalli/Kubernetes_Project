@@ -59,24 +59,52 @@
 
 
 
-# Use Apache HTTPD as base image
-FROM httpd:latest
+# # Use Apache HTTPD as base image
+# FROM httpd:latest
 
-# Install git to clone the repository
+# # Install git to clone the repository
+# RUN apt-get update && \
+#     apt-get install -y git && \
+#     rm -rf /var/lib/apt/lists/*
+
+# # Clone your portfolio GitHub repo into a temporary directory
+# RUN git clone https://github.com/NaveenMadipalli/portfolio.git /tmp/portfolio
+
+# # Copy portfolio files into Apache's root directory
+# RUN cp -r /tmp/portfolio/* /usr/local/apache2/htdocs/
+
+# # Expose Apache default port
+# EXPOSE 80
+
+# # Start Apache service (already set by base image)
+
+
+
+# Use Apache HTTPD as base image
+FROM httpd:2.4
+
+# Install git to clone from another GitHub repo
 RUN apt-get update && \
     apt-get install -y git && \
     rm -rf /var/lib/apt/lists/*
 
-# Clone your portfolio GitHub repo into a temporary directory
+# Clone your actual portfolio repo into a temporary location
 RUN git clone https://github.com/NaveenMadipalli/portfolio.git /tmp/portfolio
 
-# Copy portfolio files into Apache's root directory
+# Clear default Apache files
+RUN rm -rf /usr/local/apache2/htdocs/*
+
+# Copy the portfolio contents into the Apache web root
 RUN cp -r /tmp/portfolio/* /usr/local/apache2/htdocs/
 
-# Expose Apache default port
+# Expose Apache's default port
 EXPOSE 80
 
-# Start Apache service (already set by base image)
+
+
+
+
+
 
 
 
