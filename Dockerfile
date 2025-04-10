@@ -1,29 +1,27 @@
-# FROM almalinux:8
+FROM almalinux:8
 
-# MAINTAINER vikash@gmail.com
+MAINTAINER naveen@gmail.com
 
-# # Install required packages
-# RUN yum -y update && \
-#     yum -y install java httpd zip unzip && \
-#     yum clean all
+# Install required packages
+RUN yum -y update && \
+    yum -y install java httpd zip unzip && \
+    yum clean all
 
-# # Create working directory
-# WORKDIR /var/www/html/
+# Create working directory
+WORKDIR /var/www/html/
 
-# # Download and unzip the template
-# ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
+# Download and unzip the template
+ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
 
-# RUN unzip -q photogenic.zip && \
-#     cp -rvf photogenic/* . && \
-#     rm -rf photogenic photogenic.zip
+RUN unzip -q photogenic.zip && \
+    cp -rvf photogenic/* . && \
+    rm -rf photogenic photogenic.zip
 
-# # Expose HTTP port
-# EXPOSE 80
+# Expose HTTP port
+EXPOSE 80
 
-# # Start Apache web server in foreground
-# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
-
+# Start Apache web server in foreground
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 
 
@@ -31,29 +29,31 @@
 
 
 
-# FROM almalinux:8
 
-# MAINTAINER naveen@gmail.com
 
-# # Install required packages
-# RUN yum -y update && \
-#     yum -y install git httpd && \
-#     yum clean all
+FROM almalinux:8
 
-# # Set working directory
-# WORKDIR /var/www/html/
+MAINTAINER naveen@gmail.com
 
-# # Clone your portfolio project from GitHub
-# RUN git clone https://github.com/NaveenMadipalli/portfolio.git /var/www/html/
+# Install required packages
+RUN yum -y update && \
+    yum -y install git httpd && \
+    yum clean all
 
-# # Set permissions (optional)
-# RUN chmod -R 755 /var/www/html/
+# Set working directory
+WORKDIR /var/www/html/
 
-# # Expose Apache's default port
-# EXPOSE 80
+# Clone your portfolio project from GitHub
+RUN git clone https://github.com/NaveenMadipalli/portfolio.git /var/www/html/
 
-# # Start Apache in foreground
-# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+# Set permissions (optional)
+RUN chmod -R 755 /var/www/html/
+
+# Expose Apache's default port
+EXPOSE 80
+
+# Start Apache in foreground
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 
 
@@ -80,25 +80,25 @@
 
 
 
-# Use Apache HTTPD as base image
-FROM httpd:2.4
+# # Use Apache HTTPD as base image
+# FROM httpd:2.4
 
-# Install git to clone from another GitHub repo
-RUN apt-get update && \
-    apt-get install -y git && \
-    rm -rf /var/lib/apt/lists/*
+# # Install git to clone from another GitHub repo
+# RUN apt-get update && \
+#     apt-get install -y git && \
+#     rm -rf /var/lib/apt/lists/*
 
-# Clone your actual portfolio repo into a temporary location
-RUN git clone https://github.com/NaveenMadipalli/portfolio.git /tmp/portfolio
+# # Clone your actual portfolio repo into a temporary location
+# RUN git clone https://github.com/NaveenMadipalli/portfolio.git /tmp/portfolio
 
-# Clear default Apache files
-RUN rm -rf /usr/local/apache2/htdocs/*
+# # Clear default Apache files
+# RUN rm -rf /usr/local/apache2/htdocs/*
 
-# Copy the portfolio contents into the Apache web root
-RUN cp -r /tmp/portfolio/* /usr/local/apache2/htdocs/
+# # Copy the portfolio contents into the Apache web root
+# RUN cp -r /tmp/portfolio/* /usr/local/apache2/htdocs/
 
-# Expose Apache's default port
-EXPOSE 80
+# # Expose Apache's default port
+# EXPOSE 80
 
 
 
