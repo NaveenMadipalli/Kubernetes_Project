@@ -31,29 +31,29 @@ CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 
 
-FROM almalinux:8
+# FROM almalinux:8
 
-MAINTAINER naveen@gmail.com
+# MAINTAINER naveen@gmail.com
 
-# Install required packages
-RUN yum -y update && \
-    yum -y install git httpd && \
-    yum clean all
+# # Install required packages
+# RUN yum -y update && \
+#     yum -y install git httpd && \
+#     yum clean all
 
-# Set working directory
-WORKDIR /var/www/html/
+# # Set working directory
+# WORKDIR /var/www/html/
 
-# Clone your portfolio project from GitHub
-RUN git clone https://github.com/NaveenMadipalli/portfolio.git /var/www/html/
+# # Clone your portfolio project from GitHub
+# RUN git clone https://github.com/NaveenMadipalli/portfolio.git /var/www/html/
 
-# Set permissions (optional)
-RUN chmod -R 755 /var/www/html/
+# # Set permissions (optional)
+# RUN chmod -R 755 /var/www/html/
 
-# Expose Apache's default port
-EXPOSE 80
+# # Expose Apache's default port
+# EXPOSE 80
 
-# Start Apache in foreground
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+# # Start Apache in foreground
+# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 
 
