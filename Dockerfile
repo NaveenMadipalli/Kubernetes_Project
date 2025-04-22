@@ -1,3 +1,26 @@
+
+FROM centos
+MAINTAINER vikash@gmail.com
+RUN cd /etc/yum.repos.d/
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+RUN yum -y install java
+CMD /bin/bash
+RUN yum install -y httpd
+RUN yum install -y zip
+RUN yum install -y unzip
+ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
+WORKDIR /var/www/html/
+RUN sh -c 'unzip -q "*.zip"'
+RUN cp -rvf photogenic/* .
+RUN rm -rf photogenic photogenic.zip
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+EXPOSE 80
+
+
+
+
+
 # FROM almalinux:8
 
 # MAINTAINER naveen@gmail.com
@@ -27,31 +50,31 @@
 # chartgpt updated
 
 
-# Use AlmaLinux 8 as base image
-FROM almalinux:8
+# # Use AlmaLinux 8 as base image
+# FROM almalinux:8
 
-# Set working directory
-WORKDIR /var/www/html/
+# # Set working directory
+# WORKDIR /var/www/html/
 
-# Install required packages: unzip, Apache (httpd), curl, Java
-RUN yum -y update && \
-    yum -y install unzip httpd java-11-openjdk curl && \
-    yum clean all
+# # Install required packages: unzip, Apache (httpd), curl, Java
+# RUN yum -y update && \
+#     yum -y install unzip httpd java-11-openjdk curl && \
+#     yum clean all
 
-# Download and unzip static template safely
-RUN curl -L -o photogenic.zip https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip && \
-    unzip photogenic.zip && \
-    cp -r photogenic/* . && \
-    rm -rf photogenic photogenic.zip
+# # Download and unzip static template safely
+# RUN curl -L -o photogenic.zip https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip && \
+#     unzip photogenic.zip && \
+#     cp -r photogenic/* . && \
+#     rm -rf photogenic photogenic.zip
 
-# Set proper permissions for Apache to read content
-RUN chown -R apache:apache /var/www/html/
+# # Set proper permissions for Apache to read content
+# RUN chown -R apache:apache /var/www/html/
 
-# Expose HTTP port
-EXPOSE 80
+# # Expose HTTP port
+# EXPOSE 80
 
-# Start Apache in foreground to keep container alive
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+# # Start Apache in foreground to keep container alive
+# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 
 
