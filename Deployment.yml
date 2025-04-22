@@ -1,19 +1,19 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-   name: mrdevops
+   name: naveen
 spec:
    replicas: 2
    selector:      # tells the controller which pods to watch/belong to
     matchLabels:
-     app: mrdevops
+     app: naveen
    template:
       metadata:
         labels:
-          app: mrdevops
+          app: naveen
       spec:
        containers:
-        - name: mrdevops
+        - name: naveen
           image: naveen2911/pipeline-demo
           imagePullPolicy: Always
           ports:
