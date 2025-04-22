@@ -1,29 +1,22 @@
-FROM centos
+FROM centos:7
 
-MAINTAINER vikash@gmail.com
+LABEL maintainer="vikash@gmail.com"
 
-# Fix yum repository issues
-RUN cd /etc/yum.repos.d/ && \
-    sed -i 's/mirrorlist/#mirrorlist/g' CentOS-* && \
-    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' CentOS-*
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
+    yum -y install java httpd zip unzip
 
-# Install necessary packages
-RUN yum -y install java httpd zip unzip
-
-# Download and unzip the template
 ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
 
 WORKDIR /var/www/html/
-
 RUN unzip photogenic.zip && \
     cp -rvf photogenic/* . && \
     rm -rf photogenic photogenic.zip
 
-# Expose port 80 for web traffic
 EXPOSE 80
 
-# Start Apache in the foreground
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
 
 
 
