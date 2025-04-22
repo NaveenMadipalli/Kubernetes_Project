@@ -1,29 +1,57 @@
+# FROM almalinux:8
+
+# MAINTAINER naveen@gmail.com
+
+# # Install required packages
+# RUN yum -y update && \
+#     yum -y install java httpd zip unzip && \
+#     yum clean all
+
+# # Create working directory
+# WORKDIR /var/www/html/
+
+# # Download and unzip the template
+# ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
+
+# RUN unzip -q photogenic.zip && \
+#     cp -rvf photogenic/* . && \
+#     rm -rf photogenic photogenic.zip
+
+# # Expose HTTP port
+# EXPOSE 80
+
+# # Start Apache web server in foreground
+# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+
+# chartgpt updated
+
+
+# Use AlmaLinux 8 as base image
 FROM almalinux:8
 
-MAINTAINER naveen@gmail.com
-
-# Install required packages
-RUN yum -y update && \
-    yum -y install java httpd zip unzip && \
-    yum clean all
-
-# Create working directory
+# Set working directory
 WORKDIR /var/www/html/
 
-# Download and unzip the template
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
+# Install required packages: unzip, Apache (httpd), curl, Java
+RUN yum -y update && \
+    yum -y install unzip httpd java-11-openjdk curl && \
+    yum clean all
 
-RUN unzip -q photogenic.zip && \
-    cp -rvf photogenic/* . && \
+# Download and unzip static template safely
+RUN curl -L -o photogenic.zip https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip && \
+    unzip photogenic.zip && \
+    cp -r photogenic/* . && \
     rm -rf photogenic photogenic.zip
+
+# Set proper permissions for Apache to read content
+RUN chown -R apache:apache /var/www/html/
 
 # Expose HTTP port
 EXPOSE 80
 
-# Start Apache web server in foreground
+# Start Apache in foreground to keep container alive
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
-
 
 
 
