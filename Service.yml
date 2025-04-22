@@ -5,12 +5,35 @@ metadata:
   labels:
     app: naveen
 spec:
-  type: NodePort
   ports:
-    - protocol: TCP
-      port: 8080     
+    - port: 8080                               
       targetPort: 80                    
       nodePort: 31200
   selector:
-    app: naveen                  
-  # type: LoadBalancer                   
+    app: naveen                    
+  type: LoadBalancer    
+
+
+
+
+
+
+
+
+
+# kind: Service                             
+# apiVersion: v1
+# metadata:
+#   name: naveen
+#   labels:
+#     app: naveen
+# spec:
+#   type: NodePort
+#   ports:
+#     - protocol: TCP
+#       port: 8080     
+#       targetPort: 80                    
+#       nodePort: 31200
+#   selector:
+#     app: naveen                  
+#   # type: LoadBalancer                   
