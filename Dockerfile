@@ -21,6 +21,8 @@ CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 # ORIGINAL
 
+\
+
 
 # FROM centos:7
 # MAINTAINER vikash@gmail.com
