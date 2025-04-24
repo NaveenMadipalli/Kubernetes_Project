@@ -21,7 +21,7 @@ CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 # ORIGINAL
 
-\
+
 
 
 # FROM centos:7
