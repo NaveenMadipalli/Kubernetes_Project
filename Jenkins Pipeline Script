@@ -1,0 +1,61 @@
+node {
+    def imageTag = "v1.${BUILD_ID}"
+    stage('Git checkout') {
+        git 'https://github.com/NaveenMadipalli/Kubernetes_Project.git'
+    }
+
+    stage('Send Docker files to Ansible server over SSH') {
+        sshagent(['ansible_demo']) {
+            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.91.211'
+            sh 'scp -r /var/lib/jenkins/workspace/pipeline-demo/* ubuntu@172.31.91.211:/home/ubuntu/'
+        }
+    }
+
+    stage('Docker Build image') {
+        sshagent(['ansible_demo']) {
+            sh '''
+                ssh -o StrictHostKeyChecking=no ubuntu@172.31.91.211 "
+                cd /home/ubuntu &&
+                docker build -t $JOB_NAME:v1.$BUILD_ID ."
+            '''
+        }
+    }
+
+    stage('Docker image tagging') {
+        sshagent(['ansible_demo']) {
+            sh '''
+                ssh -o StrictHostKeyChecking=no ubuntu@172.31.91.211 cd /home/ubuntu/ "
+                docker image tag $JOB_NAME:v1.$BUILD_ID naveen2911/$JOB_NAME:v1.$BUILD_ID &&
+                docker image tag $JOB_NAME:v1.$BUILD_ID naveen2911/$JOB_NAME:latest"
+            '''
+        }
+    }
+
+    stage('Push Docker Image to Docker Hub') {
+        sshagent(['ansible_demo']) {
+            withCredentials([string(credentialsId: 'dockerhub_password', variable: 'dockerhub_password')]) {
+                sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@172.31.91.211 "
+                    docker login -u naveen2911 -p ${dockerhub_password} &&
+                    docker image push naveen2911/${JOB_NAME}:v1.${BUILD_ID} &&
+                    docker image push naveen2911/${JOB_NAME}:latest &&
+                    docker image rm naveen2911/${JOB_NAME}:v1.${BUILD_ID} naveen2911/${JOB_NAME}:latest $JOB_NAME:v1.$BUILD_ID"
+                '''
+            }
+        }
+    }
+    stage('Copy files from Ansible to Kubernetes server') {
+    sshagent(['kubernetes_server']) {
+        sh 'ssh -o StrictHostKeyChecking=no ubuntu@54.227.241.124'
+        sh 'scp -r /var/lib/jenkins/workspace/pipeline-demo/* ubuntu@54.227.241.124:/home/ubuntu/'
+
+        }
+    }
+   stage('Kubernetes Deployment using ansible'){
+        sshagent(['ansible_demo']){
+            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.91.211 cd /home/ubuntu/'
+            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.91.211 ansible-playbook ansible.yml'
+        }
+    }
+
+}
